@@ -1,8 +1,7 @@
-import { ActivityIndicator, Pressable, Text, TouchableOpacity, View } from "react-native"
+import { ActivityIndicator, Platform, Pressable, Text, TouchableOpacity, View } from "react-native"
 import { styles } from "./styles"
 import { useState } from "react";
 import DateTimePicker from '@react-native-community/datetimepicker';
-
 import { CustomCheckbox } from '../Checkbox';
 import { LinearGradient } from "expo-linear-gradient";
 import type { ApiResponse } from "../../interfaces/Api";
@@ -46,13 +45,40 @@ export const DateComponent = ({ setData, setState }: DateComponentProps) => {
         if (date) setEndDate(date);
     };
 
+
     const buscarVenda = async () => {
-        setLoading(true)
-        const response = await api.get<ApiResponse>('/wsflash.php?dtfim=2024-11-01T20:13:43.785Z&dtini=2024-11-01T20:13:43.785Z&empresa=p&filiais=101,102,107,112');
-        if (response.data.flag) {
-            setLoading(true)
-            setData(response.data);
-            setState(false)
+        setLoading(true);
+        
+        const filialIDs = Object.keys(selectedFiliais)
+            .filter((filial) => selectedFiliais[filial])
+            .map((filial) => {
+                switch (filial) {
+                    case "Centro": return 101;
+                    case "Cohama": return 102;
+                    case "Forquilha": return 106;
+                    case "Cohafuma": return 107;
+                    case "Imperatriz": return 109;
+                    case "Africanos": return 110;
+                    case "Bacabal": return 111;
+                    case "OlhoDagua": return 112;
+                    case "SantaInes": return 114;
+                    case "Maiobao": return 115;
+                    default: return null;
+                }
+            })
+            .filter((id) => id !== null)
+            .join(',');
+
+        try {
+            const response = await api.get<ApiResponse>(
+                `/wsflash.php?dtfim=${endDate.toISOString()}&dtini=${startDate.toISOString()}&empresa=p&filiais=${filialIDs}`
+            );
+            if (response.data.flag) {
+                setData(response.data);
+                setState(false);
+            }
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -71,8 +97,8 @@ export const DateComponent = ({ setData, setState }: DateComponentProps) => {
                 {showStartPicker && (
                     <DateTimePicker
                         value={startDate}
-                        mode="date"
-                        display="default"
+                        mode="date" 
+                        display={Platform.OS === "ios" ? "spinner" : "default"}
                         onChange={handleStartDateChange}
                     />
                 )}
@@ -84,7 +110,7 @@ export const DateComponent = ({ setData, setState }: DateComponentProps) => {
                     <DateTimePicker
                         value={endDate}
                         mode="date"
-                        display="default"
+                        display={Platform.OS === "ios" ? "spinner" : "default"}
                         onChange={handleEndDateChange}
                     />
                 )}
