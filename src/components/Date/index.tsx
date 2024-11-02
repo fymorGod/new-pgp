@@ -1,4 +1,4 @@
-import { ActivityIndicator, Platform, Pressable, Text, TouchableOpacity, View } from "react-native"
+import { ActivityIndicator, Button, Platform, Pressable, Text, TouchableOpacity, View } from "react-native"
 import { styles } from "./styles"
 import { useState } from "react";
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -6,6 +6,7 @@ import { CustomCheckbox } from '../Checkbox';
 import { LinearGradient } from "expo-linear-gradient";
 import type { ApiResponse } from "../../interfaces/Api";
 import { api } from "../../api/app";
+import { filiais } from "../../db/filiais";
 
 interface DateComponentProps {
     setData: (value: ApiResponse) => void;
@@ -30,25 +31,37 @@ export const DateComponent = ({ setData, setState }: DateComponentProps) => {
         SantaInes: false,
         Maiobao: false,
     });
+    const [selectAll, setSelectAll] = useState(false);
 
     const toggleFilial = (filial: string) => {
         setSelectedFiliais((prev) => ({ ...prev, [filial]: !prev[filial] }));
     };
-
+    const toggleSelectAll = () => {
+        const newState = !selectAll;
+        const updatedFiliais = Object.keys(selectedFiliais).reduce((acc, key) => ({ ...acc, [key]: newState }), {});
+        setSelectedFiliais(updatedFiliais);
+        setSelectAll(newState);
+    };
     const handleStartDateChange = (event: any, date?: Date) => {
         setShowStartPicker(false);
-        if (date) setStartDate(date);
+        if (date) {
+           
+            date.setHours(0, 0, 0, 0);
+            setStartDate(date);
+        }
     };
-
+    
     const handleEndDateChange = (event: any, date?: Date) => {
         setShowEndPicker(false);
-        if (date) setEndDate(date);
+        if (date) {
+            date.setHours(0, 0, 0, 0);
+            setEndDate(date);
+        }
     };
-
 
     const buscarVenda = async () => {
         setLoading(true);
-        
+
         const filialIDs = Object.keys(selectedFiliais)
             .filter((filial) => selectedFiliais[filial])
             .map((filial) => {
@@ -68,6 +81,7 @@ export const DateComponent = ({ setData, setState }: DateComponentProps) => {
             })
             .filter((id) => id !== null)
             .join(',');
+            console.log(filialIDs)
 
         try {
             const response = await api.get<ApiResponse>(
@@ -91,29 +105,44 @@ export const DateComponent = ({ setData, setState }: DateComponentProps) => {
                 </View>
             )}
             <View style={styles.filterContainer}>
-                <Pressable onPress={() => setShowStartPicker(true)} style={styles.dateButton}>
+                <Pressable onPress={() => setShowStartPicker(!showStartPicker)} style={styles.dateButton}>
                     <Text>Data Inicial: {startDate.toISOString()}</Text>
                 </Pressable>
                 {showStartPicker && (
+                <View>
                     <DateTimePicker
                         value={startDate}
-                        mode="date" 
-                        display={Platform.OS === "ios" ? "spinner" : "default"}
+                        mode="date"
+                        display={Platform.OS === 'ios' ? 'inline' : 'default'}
                         onChange={handleStartDateChange}
                     />
-                )}
+                    {Platform.OS === 'ios' && (
+                        <Button title="Confirmar" onPress={() => setShowStartPicker(!showStartPicker)} />
+                    )}
+                </View>
+            )}
 
-                <Pressable onPress={() => setShowEndPicker(true)} style={styles.dateButton}>
+                <Pressable onPress={() => setShowEndPicker(!showEndPicker)} style={styles.dateButton}>
                     <Text>Data Final: {endDate.toISOString()}</Text>
                 </Pressable>
                 {showEndPicker && (
+                <View>
                     <DateTimePicker
                         value={endDate}
                         mode="date"
-                        display={Platform.OS === "ios" ? "spinner" : "default"}
+                        display={Platform.OS === 'ios' ? 'inline' : 'default'}
                         onChange={handleEndDateChange}
                     />
-                )}
+                    {Platform.OS === 'ios' && (
+                        <Button title="Confirmar" onPress={() => setShowEndPicker(!showEndPicker)} />
+                    )}
+                </View>
+            )}
+                <CustomCheckbox
+                    label="Marcar todos"
+                    isChecked={selectAll}
+                    onToggle={toggleSelectAll}
+                />
 
                 {Object.keys(selectedFiliais).map((filial) => (
                     <CustomCheckbox
@@ -123,6 +152,7 @@ export const DateComponent = ({ setData, setState }: DateComponentProps) => {
                         onToggle={() => toggleFilial(filial)}
                     />
                 ))}
+
                 <TouchableOpacity onPress={() => buscarVenda()}>
                     <LinearGradient
                         start={{ x: 0, y: 2 }}

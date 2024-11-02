@@ -8,7 +8,7 @@ export const styles = StyleSheet.create({
     header: {
         width: '100%',
         height: 100,
-        paddingTop: 20,
+        paddingTop: 30,
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
@@ -40,7 +40,7 @@ export const styles = StyleSheet.create({
     iconRight: {
         position: 'absolute',
         right: 30,
-        top: 45,
+        top: 50,
         color: "#fff",
     },
     iconLeft: {
@@ -87,12 +87,44 @@ export const styles = StyleSheet.create({
         color: "#ec060e",
     },
     contentContainer: {
-        paddingVertical: 10,
-        paddingHorizontal: 15,
-        backgroundColor: "#f9f9f9",
+        padding: 10,
     },
-    contentText: {
-        fontSize: 16,
-        color: "#666",
+    tableHeader: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        paddingVertical: 5,
+        borderBottomWidth: 1,
+        borderBottomColor: '#ccc',
     },
+    tableHeaderText: {
+        flex: 1,
+        textAlign: 'center',
+        fontWeight: 'bold',
+        fontSize: 14,
+    },
+    tableRow: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        paddingVertical: 5,
+        borderBottomWidth: 1,
+        borderBottomColor: '#f0f0f0',
+    },
+    tableRowText: {
+        flex: 1,
+        textAlign: 'center',
+        fontSize: 12,
+    },
+    tableTotalRow: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        paddingVertical: 5,
+        fontWeight: 'bold',
+        backgroundColor: '#f9f9f9',
+    },
+    tableTotalText: {
+        flex: 1,
+        textAlign: 'center',
+        fontSize: 14,
+    },
+    
 });

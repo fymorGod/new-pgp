@@ -12,7 +12,7 @@ export interface Venda {
     VALOR_LIQUIDO: number;
 }
 
-interface Devolucao {
+export interface Devolucao {
     FILIAL: number;
     FLAG: number;
     DEVOLUCAO: number;
