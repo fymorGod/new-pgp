@@ -26,9 +26,7 @@ export const styles = StyleSheet.create({
     input: {
         width: '92%',
         borderWidth: 0,
-        borderRadius: 0,
-        borderRightWidth: 1,
-        borderRightColor: '#f76'
+        borderRadius: 0
     },
     iconRight: {
         marginLeft: -20,

@@ -13,6 +13,7 @@ import { api } from "../../api/app";
 import { SummaryComponent } from "../../components/Summary";
 import { RenderAccordionContent } from "../../components/Accordion";
 import { AuthContext } from "../../context/AuthContext";
+import { formatCurrency } from "../../pipes/formatterCashValue";
 
 export const HomePage = () => {
     const [activeAccordion, setActiveAccordion] = useState<number | null>(null);
@@ -22,23 +23,23 @@ export const HomePage = () => {
     const startDate = new Date();
     const endDate = new Date();
 
-    const { logout } = useContext(AuthContext);
-    
+    const { logout, token } = useContext(AuthContext);
+
     const handleAccordionToggle = (id: number) => {
         setActiveAccordion(activeAccordion === id ? null : id);
     };
-    
+
     useEffect(() => {
         const buscarVenda = async () => {
             setLoading(true);
             try {
-                const response = await api.get<ApiResponse>(`?mode=flash&empresa=p&filiais=101,102,106,107,109,110,111,112,114,115&dtini=${startDate}&dtfim=${endDate}&token=46330d82feb64fe54e096dd914d53963c5b96f0ae248a44cb4b48a5c4f84d0a2&app_id=e03ad982449af87ade1899ffbc259eee`);
+                const response = await api.get<ApiResponse>(`?mode=flash&empresa=p&filiais=101,102,106,107,109,110,111,112,114,115&dtini=${startDate}&dtfim=${endDate}&token=${token}&app_id=e03ad982449af87ade1899ffbc259eee`);
                 if (response.data.flag) {
-                    setApiResponse(response.data); 
-                    setIconFilterCondition(false); 
+                    setApiResponse(response.data);
+                    setIconFilterCondition(false);
                 }
             } catch (error) {
-                console.error("Erro ao buscar as vendas:", error); 
+                console.error("Erro ao buscar as vendas:", error);
             } finally {
                 setLoading(false);
             }
@@ -46,7 +47,7 @@ export const HomePage = () => {
         buscarVenda();
     }, []);
 
-    // Agrupa vendas por filial
+
     const getVendasPorFilial = () => {
         const vendasAgrupadas: { [key: number]: Venda[] } = {};
         if (apiResponse?.data) {
@@ -77,11 +78,12 @@ export const HomePage = () => {
                         colors={['#ED1C24', '#ec060e', '#760000']}
                         style={styles.header}
                     >
+                        <SimpleLineIcons name={'logout'} size={28} style={styles.iconRight} onPress={logout} />
                         <Text style={styles.title}>Flash de vendas</Text>
-                        <SimpleLineIcons name={'logout'} size={28} style={styles.iconRight} onPress={logout}/>
+                        <SimpleLineIcons name={'logout'} size={28} style={styles.iconRight} onPress={logout} />
                     </LinearGradient>
                     <View style={styles.boxInfo}>
-                        <Text style={styles.infoText}>| Vendas</Text>
+                        <Text style={styles.infoText}>Vendas</Text>
                         <FilterComponent iconFilterCondition={iconFilterCondition} setIconFilterCondition={setIconFilterCondition} />
                     </View>
                     {!iconFilterCondition && apiResponse && apiResponse.data ? (
@@ -97,14 +99,33 @@ export const HomePage = () => {
                                     const isExpanded = activeAccordion === id;
                                     const vendas = vendasAgrupadas[id] || [];
 
+                                    const totalValorLiquido = vendas.reduce((total, venda) => {
+
+                                        if (venda.TIPO !== "DEVOLUÇÃO") {
+                                            return total + venda.VALOR_LIQUIDO;
+                                        }
+                                        return total;
+                                    }, 0);
+
+                                    const totalDevolucao = vendas.reduce((total, venda) => {
+                                        if (venda.TIPO === "DEVOLUÇÃO" && venda.FLAG === 1) {
+                                            return total + Math.abs(venda.VALOR_LIQUIDO);
+                                        }
+                                        return total;
+                                    }, 0);
+
+                                    const total = totalValorLiquido - totalDevolucao;
+
                                     return (
                                         <View key={id} style={styles.itemContainer}>
                                             <TouchableOpacity style={styles.itemRow} onPress={() => handleAccordionToggle(id)}>
-                                                <Text style={styles.itemText}>{filiais[id]}</Text>
+                                                <Text style={styles.itemTextLeft}>{filiais[id]}</Text>
+                                                <Text style={styles.itemTextRight}>{formatCurrency(total)}</Text>
                                                 <Icon
                                                     name={isExpanded ? "chevron-up" : "chevron-down"}
                                                     size={20}
                                                     color="#ec060e"
+                                                    style={styles.iconStyle}
                                                 />
                                             </TouchableOpacity>
                                             <Collapsible collapsed={!isExpanded}>

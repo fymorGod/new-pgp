@@ -3,6 +3,7 @@ import { StyleSheet } from "react-native";
 export const styles = StyleSheet.create({
     contentContainer: {
         padding: 10,
+        backgroundColor: '#f2f2ff'
     },
     tableHeader: {
         flexDirection: 'row',
@@ -34,7 +35,7 @@ export const styles = StyleSheet.create({
         justifyContent: 'space-between',
         paddingVertical: 5,
         fontWeight: 'bold',
-        backgroundColor: '#f1f1f1',
+        backgroundColor: '#fff',
     },
     tableTotalText: {
         flex: 1,

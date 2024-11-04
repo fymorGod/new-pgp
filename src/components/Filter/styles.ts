@@ -2,8 +2,8 @@ import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
     boxFilter: {
-        width: 120,
-        height: 50,
+        width: 110,
+        height: 40,
         flexDirection: 'row',
         backgroundColor: '#ec060e',
         paddingVertical: 10,

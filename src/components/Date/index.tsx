@@ -1,11 +1,12 @@
 import { ActivityIndicator, Button, Platform, Pressable, Text, TouchableOpacity, View } from "react-native"
 import { styles } from "./styles"
-import { useState } from "react";
+import { useContext, useState } from "react";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { CustomCheckbox } from '../Checkbox';
 import { LinearGradient } from "expo-linear-gradient";
 import type { ApiResponse } from "../../interfaces/Api";
 import { api } from "../../api/app";
+import { AuthContext } from "../../context/AuthContext";
 
 interface DateComponentProps {
     setData: (value: ApiResponse) => void;
@@ -31,7 +32,7 @@ export const DateComponent = ({ setData, setState }: DateComponentProps) => {
         Maiobao: false,
     });
     const [selectAll, setSelectAll] = useState(false);
-
+    const { token } = useContext(AuthContext)
     const toggleFilial = (filial: string) => {
         setSelectedFiliais((prev) => ({ ...prev, [filial]: !prev[filial] }));
     };
@@ -44,12 +45,12 @@ export const DateComponent = ({ setData, setState }: DateComponentProps) => {
     const handleStartDateChange = (event: any, date?: Date) => {
         setShowStartPicker(false);
         if (date) {
-           
+
             date.setHours(0, 0, 0, 0);
             setStartDate(date);
         }
     };
-    
+
     const handleEndDateChange = (event: any, date?: Date) => {
         setShowEndPicker(false);
         if (date) {
@@ -80,11 +81,11 @@ export const DateComponent = ({ setData, setState }: DateComponentProps) => {
             })
             .filter((id) => id !== null)
             .join(',');
-            console.log(filialIDs)
+        console.log(filialIDs)
 
         try {
             const response = await api.get<ApiResponse>(
-                `/?mode=flash&empresa=p&filiais=${filialIDs}&dtini=${startDate.toISOString()}&dtfim=${endDate.toISOString()}&token=46330d82feb64fe54e096dd914d53963c5b96f0ae248a44cb4b48a5c4f84d0a2&app_id=e03ad982449af87ade1899ffbc259eee`
+                `/?mode=flash&empresa=p&filiais=${filialIDs}&dtini=${startDate.toISOString()}&dtfim=${endDate.toISOString()}&token=${token}&app_id=e03ad982449af87ade1899ffbc259eee`
             );
             if (response.data.flag) {
                 setData(response.data);
@@ -105,38 +106,42 @@ export const DateComponent = ({ setData, setState }: DateComponentProps) => {
             )}
             <View style={styles.filterContainer}>
                 <Pressable onPress={() => setShowStartPicker(!showStartPicker)} style={styles.dateButton}>
-                    <Text>Data Inicial: {startDate.toISOString()}</Text>
+                    <Text style={styles.textData}>
+                        Data Inicial: {new Intl.DateTimeFormat('pt-BR', { year: 'numeric', month: '2-digit', day: '2-digit' }).format(startDate)}
+                    </Text>
                 </Pressable>
                 {showStartPicker && (
-                <View>
-                    <DateTimePicker
-                        value={startDate}
-                        mode="date"
-                        display={Platform.OS === 'ios' ? 'inline' : 'default'}
-                        onChange={handleStartDateChange}
-                    />
-                    {Platform.OS === 'ios' && (
-                        <Button title="Confirmar" onPress={() => setShowStartPicker(!showStartPicker)} />
-                    )}
-                </View>
-            )}
+                    <View>
+                        <DateTimePicker
+                            value={startDate}
+                            mode="date"
+                            display={Platform.OS === 'ios' ? 'inline' : 'default'}
+                            onChange={handleStartDateChange}
+                        />
+                        {Platform.OS === 'ios' && (
+                            <Button title="Confirmar" onPress={() => setShowStartPicker(!showStartPicker)} />
+                        )}
+                    </View>
+                )}
 
                 <Pressable onPress={() => setShowEndPicker(!showEndPicker)} style={styles.dateButton}>
-                    <Text>Data Final: {endDate.toISOString()}</Text>
+                    <Text style={styles.textData}>
+                        Data final: {new Intl.DateTimeFormat('pt-BR', { year: 'numeric', month: '2-digit', day: '2-digit' }).format(endDate)}
+                    </Text>
                 </Pressable>
                 {showEndPicker && (
-                <View>
-                    <DateTimePicker
-                        value={endDate}
-                        mode="date"
-                        display={Platform.OS === 'ios' ? 'inline' : 'default'}
-                        onChange={handleEndDateChange}
-                    />
-                    {Platform.OS === 'ios' && (
-                        <Button title="Confirmar" onPress={() => setShowEndPicker(!showEndPicker)} />
-                    )}
-                </View>
-            )}
+                    <View>
+                        <DateTimePicker
+                            value={endDate}
+                            mode="date"
+                            display={Platform.OS === 'ios' ? 'inline' : 'default'}
+                            onChange={handleEndDateChange}
+                        />
+                        {Platform.OS === 'ios' && (
+                            <Button title="Confirmar" onPress={() => setShowEndPicker(!showEndPicker)} />
+                        )}
+                    </View>
+                )}
                 <CustomCheckbox
                     label="Marcar todos"
                     isChecked={selectAll}

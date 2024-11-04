@@ -3,13 +3,21 @@ import { StyleSheet } from 'react-native';
 export const styles = StyleSheet.create({
     filterContainer: {
         padding: 20,
+        marginTop: -10
     },
     dateButton: {
         padding: 10,
         backgroundColor: '#f2f2ff',
         marginVertical: 5,
         borderRadius: 5,
+        borderWidth: 2,
+        borderColor: '#fff',
         alignItems: 'center',
+    },
+    textData: {
+        fontSize: 16,
+        color: '#002',
+        fontWeight: '500'
     },
     loadingContainer: {
         flex: 1,

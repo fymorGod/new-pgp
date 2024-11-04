@@ -2,14 +2,11 @@ import React from "react";
 import { Text, View } from "react-native";
 import { styles } from "./styles";
 import type { Venda } from "../../interfaces/Api";
+import { formatCurrency } from "../../pipes/formatterCashValue";
 
 interface AccordionProps {
     vendas: Venda[];
 }
-
-const formatCurrency = (value: number): string => {
-    return `R$ ${value.toFixed(2).replace('.', ',').replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')}`;
-};
 
 export const RenderAccordionContent = ({ vendas }: AccordionProps) => {
   

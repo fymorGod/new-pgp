@@ -9,6 +9,7 @@ export const styles = StyleSheet.create({
         borderColor: '#ccc',
         borderRadius: 5,
         margin: 10,
+        backgroundColor: '#f2f2ff'
     },
     infoContainer: {
         flexDirection: 'row',
@@ -17,10 +18,13 @@ export const styles = StyleSheet.create({
         paddingVertical: 5,
     },
     label: {
-        fontWeight: 'bold',
+        fontWeight: '500',
+        color: '#324232',
+        fontSize: 16,
     },
     value: {
         fontSize: 16,
+        color: '#324232',
     },
     green: {
         color: 'green',

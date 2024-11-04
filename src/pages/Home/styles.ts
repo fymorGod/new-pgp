@@ -46,11 +46,11 @@ export const styles = StyleSheet.create({
     iconLeft: {
         position: 'absolute',
         left: 30,
-        top: 45,
+        top: 50,
         color: "#fff",
     },
     boxInfo: {
-        marginTop: 20,
+        marginTop: 10,
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
@@ -71,62 +71,35 @@ export const styles = StyleSheet.create({
         marginTop: 10,
         marginBottom: 10
     },
-    itemContainer: {
-        borderBottomWidth: 1,
-        borderColor: "#ddd",
-        paddingVertical: 10,
-        paddingHorizontal: 15,
-        marginBottom: 10,
-    },
     itemRow: {
         flexDirection: "row",
-        justifyContent: "space-between",
         alignItems: "center",
+        justifyContent: "space-between",
         paddingVertical: 10,
-    },
-    itemText: {
-        fontSize: 18,
-        color: "#ec060e",
-    },
-    contentContainer: {
-        padding: 10,
-    },
-    tableHeader: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        paddingVertical: 5,
+        paddingHorizontal: 16,
+        backgroundColor: "#f5f5f5",
         borderBottomWidth: 1,
-        borderBottomColor: '#ccc',
+        borderBottomColor: "#ddd",
     },
-    tableHeaderText: {
+    itemTextLeft: {
+        fontSize: 16,
+        color: "#333",
+
+        fontWeight: "bold",
         flex: 1,
-        textAlign: 'center',
-        fontWeight: 'bold',
-        fontSize: 14,
     },
-    tableRow: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        paddingVertical: 5,
-        borderBottomWidth: 1,
-        borderBottomColor: '#f0f0f0',
+    itemTextRight: {
+        fontSize: 16,
+        color: "#333",
+        fontWeight: "bold",
+        textAlign: "right",
+        marginRight: 10, // espaço para o ícone
     },
-    tableRowText: {
-        flex: 1,
-        textAlign: 'center',
-        fontSize: 12,
+    iconStyle: {
+        marginLeft: 5,
     },
-    tableTotalRow: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        paddingVertical: 5,
-        fontWeight: 'bold',
-        backgroundColor: '#f9f9f9',
-    },
-    tableTotalText: {
-        flex: 1,
-        textAlign: 'center',
-        fontSize: 14,
+    itemContainer: {
+        marginBottom: 8,
     },
     
 });
