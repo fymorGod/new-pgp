@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { ActivityIndicator, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { styles } from "./styles";
 import { SimpleLineIcons } from '@expo/vector-icons';
@@ -12,20 +12,22 @@ import { filiais } from "../../db/filiais";
 import { api } from "../../api/app";
 import { SummaryComponent } from "../../components/Summary";
 import { RenderAccordionContent } from "../../components/Accordion";
+import { AuthContext } from "../../context/AuthContext";
 
 export const HomePage = () => {
     const [activeAccordion, setActiveAccordion] = useState<number | null>(null);
     const [iconFilterCondition, setIconFilterCondition] = useState(false);
     const [loading, setLoading] = useState(false);
     const [apiResponse, setApiResponse] = useState<ApiResponse | null>(null);
-
     const startDate = new Date();
     const endDate = new Date();
 
+    const { logout } = useContext(AuthContext);
+    
     const handleAccordionToggle = (id: number) => {
         setActiveAccordion(activeAccordion === id ? null : id);
     };
-
+    
     useEffect(() => {
         const buscarVenda = async () => {
             setLoading(true);
@@ -76,7 +78,7 @@ export const HomePage = () => {
                         style={styles.header}
                     >
                         <Text style={styles.title}>Flash de vendas</Text>
-                        <SimpleLineIcons name={'logout'} size={28} style={styles.iconRight} />
+                        <SimpleLineIcons name={'logout'} size={28} style={styles.iconRight} onPress={logout}/>
                     </LinearGradient>
                     <View style={styles.boxInfo}>
                         <Text style={styles.infoText}>| Vendas</Text>
