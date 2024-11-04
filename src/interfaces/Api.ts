@@ -1,19 +1,19 @@
-export interface ApiResponse {
-    flag: boolean;
-    data: {
-        vendas: Venda[];
-        devolucoes: Devolucao[];
-    };
+
+export enum TipoVenda {
+    PRODUTOS = "PRODUTOS",
+    ECOMMERCE = "ECOMMERCE",
+    BRASIL_ATACADO = "BRASIL_ATACADO",
+    DEVOLUCAO = "DEVOLUÇÃO"
 }
 
 export interface Venda {
     FILIAL: number;
-    TIPO: string;
+    TIPO: TipoVenda; 
+    FLAG?: number;
     VALOR_LIQUIDO: number;
 }
 
-export interface Devolucao {
-    FILIAL: number;
-    FLAG: number;
-    DEVOLUCAO: number;
+export interface ApiResponse {
+    flag: boolean;
+    data: Venda[]; 
 }

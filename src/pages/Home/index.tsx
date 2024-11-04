@@ -7,16 +7,20 @@ import { FilterComponent } from "../../components/Filter";
 import { DateComponent } from "../../components/Date";
 import Collapsible from "react-native-collapsible";
 import Icon from "react-native-vector-icons/FontAwesome";
-import type { ApiResponse, Devolucao, Venda } from "../../interfaces/Api";
+import type { ApiResponse, Venda } from "../../interfaces/Api";
 import { filiais } from "../../db/filiais";
 import { api } from "../../api/app";
 import { SummaryComponent } from "../../components/Summary";
+import { RenderAccordionContent } from "../../components/Accordion";
 
 export const HomePage = () => {
     const [activeAccordion, setActiveAccordion] = useState<number | null>(null);
     const [iconFilterCondition, setIconFilterCondition] = useState(false);
     const [loading, setLoading] = useState(false);
     const [apiResponse, setApiResponse] = useState<ApiResponse | null>(null);
+
+    const startDate = new Date();
+    const endDate = new Date();
 
     const handleAccordionToggle = (id: number) => {
         setActiveAccordion(activeAccordion === id ? null : id);
@@ -25,96 +29,36 @@ export const HomePage = () => {
     useEffect(() => {
         const buscarVenda = async () => {
             setLoading(true);
-            const response = await api.get<ApiResponse>('/wsflash.php?dtfim=2024-11-01T20:13:43.785Z&dtini=2024-11-01T20:13:43.785Z&empresa=p&filiais=101,102,106,107,109,110,111,112,114,115');
-            if (response.data.flag) {
-                setLoading(false
-                );
-                setApiResponse(response.data);
-                setIconFilterCondition(false);
+            try {
+                const response = await api.get<ApiResponse>(`?mode=flash&empresa=p&filiais=101,102,106,107,109,110,111,112,114,115&dtini=${startDate}&dtfim=${endDate}&token=46330d82feb64fe54e096dd914d53963c5b96f0ae248a44cb4b48a5c4f84d0a2&app_id=e03ad982449af87ade1899ffbc259eee`);
+                if (response.data.flag) {
+                    setApiResponse(response.data); 
+                    setIconFilterCondition(false); 
+                }
+            } catch (error) {
+                console.error("Erro ao buscar as vendas:", error); 
+            } finally {
+                setLoading(false);
             }
         };
         buscarVenda();
     }, []);
-    const renderAccordionContent = (vendas: Venda[], devolucoes: Devolucao[]) => {
-        // Calcula o total líquido das vendas
-        const totalValorLiquido = vendas.reduce((total, venda) => total + venda.VALOR_LIQUIDO, 0);
 
-        // Calcula o total de devoluções onde FLAG é 1
-        const totalDevolucao = devolucoes.reduce((total, devolucao) => {
-            return devolucao.FLAG === 1 ? total + devolucao.DEVOLUCAO : total;
-        }, 0);
-
-        // Calcula o total considerando as devoluções
-        const totalComDevolucao = totalValorLiquido - totalDevolucao;
-
-        return (
-            <View style={styles.contentContainer}>
-                <View style={styles.tableHeader}>
-                    <Text style={styles.tableHeaderText}>Tipo</Text>
-                    <Text style={styles.tableHeaderText}>Valor Líq.</Text>
-                    <Text style={styles.tableHeaderText}>%</Text>
-                    <Text style={styles.tableHeaderText}>Devol.</Text>
-                </View>
-
-                {vendas.map((venda, index) => {
-                    const percentual = totalValorLiquido > 0
-                        ? ((venda.VALOR_LIQUIDO / totalValorLiquido) * 100).toFixed(2)
-                        : '0.00';
-
-                    const devolucao = devolucoes.find((dev) => dev.FILIAL === venda.FILIAL && dev.FLAG === 1)?.DEVOLUCAO || 0;
-
-                    return (
-                        <View key={index} style={styles.tableRow}>
-                            <Text style={styles.tableRowText}>{venda.TIPO}</Text>
-                            <Text style={styles.tableRowText}>R$ {venda.VALOR_LIQUIDO.toFixed(2)}</Text>
-                            <Text style={styles.tableRowText}>{percentual}%</Text>
-                            <Text style={styles.tableRowText}>R$ {devolucao.toFixed(2)}</Text>
-                        </View>
-                    );
-                })}
-
-                <View style={styles.tableTotalRow}>
-                    <Text style={styles.tableTotalText}>Total</Text>
-                    <Text style={styles.tableTotalText}>R$ {totalComDevolucao.toFixed(2)}</Text>
-                    <Text style={styles.tableTotalText}>
-                        {totalValorLiquido > 0 ? '100%' : '0%'}
-                    </Text>
-                    <Text style={styles.tableTotalText}></Text>
-                </View>
-            </View>
-        );
-    };
-
+    // Agrupa vendas por filial
     const getVendasPorFilial = () => {
-        if (apiResponse?.data?.vendas) {
-            const vendasAgrupadas: { [key: number]: Venda[] } = {};
-            apiResponse.data.vendas.forEach((venda) => {
+        const vendasAgrupadas: { [key: number]: Venda[] } = {};
+        if (apiResponse?.data) {
+            apiResponse.data.forEach((venda) => {
                 if (!vendasAgrupadas[venda.FILIAL]) {
                     vendasAgrupadas[venda.FILIAL] = [];
                 }
                 vendasAgrupadas[venda.FILIAL].push(venda);
             });
-            return vendasAgrupadas;
         }
-        return {};
-    };
-
-    const getDevolucoesPorFilial = () => {
-        if (apiResponse?.data?.devolucoes) {
-            const devolucoesAgrupadas: { [key: number]: Devolucao[] } = {};
-            apiResponse.data.devolucoes.forEach((devolucao) => {
-                if (!devolucoesAgrupadas[devolucao.FILIAL]) {
-                    devolucoesAgrupadas[devolucao.FILIAL] = [];
-                }
-                devolucoesAgrupadas[devolucao.FILIAL].push(devolucao);
-            });
-            return devolucoesAgrupadas;
-        }
-        return {};
+        return vendasAgrupadas;
     };
 
     const vendasAgrupadas = getVendasPorFilial();
-    const devolucoesAgrupadas = getDevolucoesPorFilial();
 
     return (
         <View style={styles.container}>
@@ -139,12 +83,9 @@ export const HomePage = () => {
                         <FilterComponent iconFilterCondition={iconFilterCondition} setIconFilterCondition={setIconFilterCondition} />
                     </View>
                     {!iconFilterCondition && apiResponse && apiResponse.data ? (
-                        <SummaryComponent
-                            vendas={apiResponse.data.vendas}
-                            devolucoes={apiResponse.data.devolucoes}
-                        />
+                        <SummaryComponent vendas={apiResponse.data} />
                     ) : null}
-                    <View>
+                    <View style={{ flex: 1 }}>
                         {iconFilterCondition ? (
                             <DateComponent setData={setApiResponse} setState={setIconFilterCondition} />
                         ) : (
@@ -152,8 +93,7 @@ export const HomePage = () => {
                                 {Object.keys(vendasAgrupadas).map((filialId) => {
                                     const id = parseInt(filialId);
                                     const isExpanded = activeAccordion === id;
-                                    const vendas = vendasAgrupadas[id];
-                                    const devolucoes = devolucoesAgrupadas[id] || [];
+                                    const vendas = vendasAgrupadas[id] || [];
 
                                     return (
                                         <View key={id} style={styles.itemContainer}>
@@ -166,7 +106,7 @@ export const HomePage = () => {
                                                 />
                                             </TouchableOpacity>
                                             <Collapsible collapsed={!isExpanded}>
-                                                {renderAccordionContent(vendas, devolucoes)}
+                                                <RenderAccordionContent vendas={vendas} />
                                             </Collapsible>
                                         </View>
                                     );

@@ -1,6 +1,6 @@
 import axios from "axios";
 
 export const api = axios.create({
-    baseURL: "https://eportal.apotiguar.com.br/",
-    timeout: 10000,
+    baseURL: "https://api.apotiguar.com.br:64462",
+    timeout: 20000,
 });

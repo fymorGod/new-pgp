@@ -6,7 +6,6 @@ import { CustomCheckbox } from '../Checkbox';
 import { LinearGradient } from "expo-linear-gradient";
 import type { ApiResponse } from "../../interfaces/Api";
 import { api } from "../../api/app";
-import { filiais } from "../../db/filiais";
 
 interface DateComponentProps {
     setData: (value: ApiResponse) => void;
@@ -85,7 +84,7 @@ export const DateComponent = ({ setData, setState }: DateComponentProps) => {
 
         try {
             const response = await api.get<ApiResponse>(
-                `/wsflash.php?dtfim=${endDate.toISOString()}&dtini=${startDate.toISOString()}&empresa=p&filiais=${filialIDs}`
+                `/?mode=flash&empresa=p&filiais=${filialIDs}&dtini=${startDate.toISOString()}&dtfim=${endDate.toISOString()}&token=46330d82feb64fe54e096dd914d53963c5b96f0ae248a44cb4b48a5c4f84d0a2&app_id=e03ad982449af87ade1899ffbc259eee`
             );
             if (response.data.flag) {
                 setData(response.data);
