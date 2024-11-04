@@ -14,7 +14,7 @@ import { SummaryComponent } from "../../components/Summary";
 import { RenderAccordionContent } from "../../components/Accordion";
 import { AuthContext } from "../../context/AuthContext";
 import { formatCurrency } from "../../pipes/formatterCashValue";
-import Animated, { FadeInDown, FadeInRight } from "react-native-reanimated";
+import Animated, { BounceInRight, FadeInDown, FadeInRight } from "react-native-reanimated";
 
 export const HomePage = () => {
     const [activeAccordion, setActiveAccordion] = useState<number | null>(null);
@@ -85,7 +85,9 @@ export const HomePage = () => {
                     </LinearGradient>
                     <View style={styles.boxInfo}>
                         <Text style={styles.infoText}>Vendas</Text>
-                        <FilterComponent iconFilterCondition={iconFilterCondition} setIconFilterCondition={setIconFilterCondition} />
+                        <Animated.View entering={BounceInRight.delay(250)}>
+                            <FilterComponent iconFilterCondition={iconFilterCondition} setIconFilterCondition={setIconFilterCondition} />
+                        </Animated.View>
                     </View>
                     {!iconFilterCondition && apiResponse && apiResponse.data ? (
                         <SummaryComponent vendas={apiResponse.data} />
