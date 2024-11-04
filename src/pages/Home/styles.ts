@@ -85,13 +85,13 @@ export const styles = StyleSheet.create({
         fontSize: 16,
         color: "#333",
 
-        fontWeight: "bold",
+        fontWeight: "500",
         flex: 1,
     },
     itemTextRight: {
         fontSize: 16,
         color: "#333",
-        fontWeight: "bold",
+        fontWeight: "500",
         textAlign: "right",
         marginRight: 10, // espaço para o ícone
     },

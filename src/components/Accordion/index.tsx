@@ -51,7 +51,7 @@ export const RenderAccordionContent = ({ vendas }: AccordionProps) => {
                     <View key={index} style={styles.tableRow}>
                         <Text style={styles.tableRowText}>{tipo}</Text>
                         <Text style={styles.tableRowText}>{formatCurrency(valor)}</Text>
-                        <Text style={styles.tableRowText}>{percentual}%</Text>
+                        <Text style={styles.tableRowTextGreen}>{percentual}%</Text>
                     </View>
                 );
             })}
@@ -60,7 +60,7 @@ export const RenderAccordionContent = ({ vendas }: AccordionProps) => {
                 <View style={styles.tableRow}>
                     <Text style={styles.tableRowText}>DEVOLUÇÃO</Text>
                     <Text style={styles.tableRowText}>{formatCurrency(totalDevolucao)}</Text>
-                    <Text style={styles.tableRowText}>
+                    <Text style={styles.tableRowTextRed}>
                         {totalValorLiquido > 0 ? ((totalDevolucao / totalValorLiquido) * 100).toFixed(2) : '0.00'}%
                     </Text>
                 </View>
@@ -69,7 +69,7 @@ export const RenderAccordionContent = ({ vendas }: AccordionProps) => {
             <View style={styles.tableTotalRow}>
                 <Text style={styles.tableTotalText}>Total</Text>
                 <Text style={styles.tableTotalText}>{formatCurrency(total)}</Text>
-                <Text style={styles.tableTotalText}>100%</Text>
+                <Text style={styles.tableRowTextGreen}>100%</Text>
             </View>
         </View>
     );

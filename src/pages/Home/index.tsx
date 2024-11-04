@@ -14,6 +14,7 @@ import { SummaryComponent } from "../../components/Summary";
 import { RenderAccordionContent } from "../../components/Accordion";
 import { AuthContext } from "../../context/AuthContext";
 import { formatCurrency } from "../../pipes/formatterCashValue";
+import Animated, { FadeInDown, FadeInRight } from "react-native-reanimated";
 
 export const HomePage = () => {
     const [activeAccordion, setActiveAccordion] = useState<number | null>(null);
@@ -93,7 +94,7 @@ export const HomePage = () => {
                         {iconFilterCondition ? (
                             <DateComponent setData={setApiResponse} setState={setIconFilterCondition} />
                         ) : (
-                            <ScrollView style={styles.list}>
+                            <Animated.ScrollView entering={FadeInRight.delay(300)} style={styles.list}>
                                 {Object.keys(vendasAgrupadas).map((filialId) => {
                                     const id = parseInt(filialId);
                                     const isExpanded = activeAccordion === id;
@@ -134,7 +135,7 @@ export const HomePage = () => {
                                         </View>
                                     );
                                 })}
-                            </ScrollView>
+                            </Animated.ScrollView>
                         )}
                     </View>
                 </>

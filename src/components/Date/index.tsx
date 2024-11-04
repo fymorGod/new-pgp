@@ -7,6 +7,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import type { ApiResponse } from "../../interfaces/Api";
 import { api } from "../../api/app";
 import { AuthContext } from "../../context/AuthContext";
+import Animated, { FadeInDown, FadeInLeft, FadeInRight, FadeInUp } from "react-native-reanimated";
 
 interface DateComponentProps {
     setData: (value: ApiResponse) => void;
@@ -104,24 +105,24 @@ export const DateComponent = ({ setData, setState }: DateComponentProps) => {
                     <Text style={styles.loadingText}>Carregando...</Text>
                 </View>
             )}
-            <View style={styles.filterContainer}>
+            <Animated.View entering={FadeInDown.delay(200)} style={styles.filterContainer}>
                 <Pressable onPress={() => setShowStartPicker(!showStartPicker)} style={styles.dateButton}>
                     <Text style={styles.textData}>
                         Data Inicial: {new Intl.DateTimeFormat('pt-BR', { year: 'numeric', month: '2-digit', day: '2-digit' }).format(startDate)}
                     </Text>
                 </Pressable>
                 {showStartPicker && (
-                    <View>
+                    <Animated.View entering={FadeInUp.delay(150)}>
                         <DateTimePicker
                             value={startDate}
                             mode="date"
                             display={Platform.OS === 'ios' ? 'inline' : 'default'}
                             onChange={handleStartDateChange}
                         />
-                        {Platform.OS === 'ios' && (
+                        {/* {Platform.OS === 'ios' && (
                             <Button title="Confirmar" onPress={() => setShowStartPicker(!showStartPicker)} />
-                        )}
-                    </View>
+                        )} */}
+                    </Animated.View>
                 )}
 
                 <Pressable onPress={() => setShowEndPicker(!showEndPicker)} style={styles.dateButton}>
@@ -130,17 +131,17 @@ export const DateComponent = ({ setData, setState }: DateComponentProps) => {
                     </Text>
                 </Pressable>
                 {showEndPicker && (
-                    <View>
+                    <Animated.View entering={FadeInUp.delay(150)}>
                         <DateTimePicker
                             value={endDate}
                             mode="date"
                             display={Platform.OS === 'ios' ? 'inline' : 'default'}
                             onChange={handleEndDateChange}
                         />
-                        {Platform.OS === 'ios' && (
+                        {/* {Platform.OS === 'ios' && (
                             <Button title="Confirmar" onPress={() => setShowEndPicker(!showEndPicker)} />
-                        )}
-                    </View>
+                        )} */}
+                    </Animated.View>
                 )}
                 <CustomCheckbox
                     label="Marcar todos"
@@ -164,10 +165,10 @@ export const DateComponent = ({ setData, setState }: DateComponentProps) => {
                         colors={['#ED1C24', '#ec060e', '#760000']}
                         style={styles.btnBuscar}
                     >
-                        <Text style={styles.btnTextBuscar}>Buscar</Text>
+                        <Animated.Text entering={FadeInLeft.delay(300)} style={styles.btnTextBuscar}>Buscar</Animated.Text>
                     </LinearGradient>
                 </TouchableOpacity>
-            </View>
+            </Animated.View>
         </>
     );
 }

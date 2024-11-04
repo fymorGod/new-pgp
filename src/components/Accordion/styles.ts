@@ -28,7 +28,22 @@ export const styles = StyleSheet.create({
     tableRowText: {
         flex: 1,
         textAlign: 'center',
-        fontSize: 12,
+        fontSize: 14,
+        textTransform: 'capitalize'
+    },
+    tableRowTextGreen: {
+        flex: 1,
+        textAlign: 'center',
+        fontSize: 14,
+        fontWeight: '600',
+        color:'green'
+    },
+    tableRowTextRed: {
+        flex: 1,
+        textAlign: 'center',
+        fontSize: 14,
+        fontWeight: '600',
+        color:'red'
     },
     tableTotalRow: {
         flexDirection: 'row',
