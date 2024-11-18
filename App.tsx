@@ -4,7 +4,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { RootNavigator } from './src/router/RootNavigator';
 import { AuthProvider } from './src/context/AuthContext';
 import { SplashScreen } from './src/pages/SplashScreen';
-
+// comentario teste 
 export default function App() {
   const [isShowSplash, setIsShowSplash] = React.useState<boolean>(true);
   
