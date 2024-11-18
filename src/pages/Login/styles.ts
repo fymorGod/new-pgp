@@ -20,6 +20,23 @@ export const styles = StyleSheet.create({
         backgroundColor: '#f2f2ff',
         overflow: 'hidden'
     },
+    loadingContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#11111F', 
+        position: 'absolute',
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 0,
+        zIndex: 1000, 
+    },
+    loadingText: {
+        color: '#ffffff', 
+        marginTop: 10, 
+        fontSize: 16, 
+    },
     iconLeft: {
         marginRight: 0,
     },

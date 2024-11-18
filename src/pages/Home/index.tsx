@@ -48,7 +48,6 @@ export const HomePage = () => {
         buscarVenda();
     }, []);
 
-
     const getVendasPorFilial = () => {
         const vendasAgrupadas: { [key: number]: Venda[] } = {};
         if (apiResponse?.data) {
@@ -69,7 +68,7 @@ export const HomePage = () => {
             {loading ? (
                 <View style={styles.loadingContainer}>
                     <ActivityIndicator size="large" color="#ffffff" />
-                    <Text style={styles.loadingText}>Carregando...</Text>
+                    <Text style={styles.loadingText}>Preparando os dados de vendas...</Text>
                 </View>
             ) : (
                 <>

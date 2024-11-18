@@ -19,6 +19,8 @@
     "expo-application": "~5.9.1",
     "expo-linear-gradient": "~13.0.2",
     "expo-status-bar": "~1.12.1",
+    "expo-updates": "~0.25.27",
+    "metro": "^0.73.0",
     "react": "18.2.0",
     "react-hook-form": "^7.53.1",
     "react-native": "0.74.5",
@@ -28,8 +30,7 @@
     "react-native-screens": "3.31.1",
     "react-native-toast-message": "^2.2.1",
     "react-native-vector-icons": "^10.2.0",
-    "zustand": "^5.0.1",
-    "expo-updates": "~0.25.27"
+    "zustand": "^5.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

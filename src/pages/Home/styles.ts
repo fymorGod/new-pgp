@@ -17,7 +17,7 @@ export const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#444', 
+        backgroundColor: '#11111F', 
         position: 'absolute',
         top: 0,
         bottom: 0,

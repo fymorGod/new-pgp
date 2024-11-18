@@ -2,7 +2,7 @@
   "expo": {
     "name": "new-pgp",
     "slug": "new-pgp",
-    "version": "1.0.0",
+    "version": "1.0.3",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -27,7 +27,7 @@
     },
     "extra": {
       "eas": {
-        "projectId": "4c45e95b-f0e2-4600-8a41-ae679377b73b"
+        "projectId": "64c70ced-5c63-4b8b-ab88-ce22ea0a3a83"
       }
     }
   }
