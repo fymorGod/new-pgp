@@ -16,11 +16,18 @@ export const RootNavigator = () => {
     return (
         <Stack.Navigator>
             {authenticated && token ? (
-                <Stack.Screen name="Home" component={HomePage} options={{ headerShown: false, animation: 'slide_from_right'}} />
+                <Stack.Screen
+                    name="Home"
+                    component={HomePage}
+                    options={{ headerShown: false, animation: 'slide_from_right' }}
+                />
             ) : (
-                <Stack.Screen name="Login" component={LoginPage} options={{ headerShown: false, animation: 'slide_from_right'}} />
-            ) 
-        }
+                <Stack.Screen
+                    name="Login"
+                    component={LoginPage}
+                    options={{ headerShown: false, animation: 'slide_from_right' }}
+                />
+            )}
         </Stack.Navigator>
     );
 };

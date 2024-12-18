@@ -43,7 +43,6 @@ export const LoginPage = () => {
             password: data.password
         });
         if (res.data.flag) {
-            console.log("Hello world")
             setAuthenticated("authenticate");
             setToken(res.data.data.token);
             setUser({
@@ -52,7 +51,7 @@ export const LoginPage = () => {
                 username: res.data.data.username,
                 permission: res.data.data.permissions
             });
-            navigation.navigate("Home");
+            navigation.navigate('Home');
         } else {
             Toast.show({
                 type: 'error',
